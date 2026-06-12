@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP2 PSIQUIATRIA - MED 46</title>
+<style>
+
+:root{
+  --bg:#07111f;
+  --bg2:#101a30;
+  --panel:rgba(9,18,33,.88);
+  --card:rgba(18,31,53,.92);
+  --card2:rgba(22,38,65,.96);
+  --text:#eef6ff;
+  --muted:#a8bad4;
+  --accent:#38bdf8;
+  --accent2:#2563eb;
+  --ok:#22c55e;
+  --bad:#ef4444;
+  --warn:#f59e0b;
+  --line:#2d456c;
+  --soft:#dff6ff;
+  --shadow:0 22px 55px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, Segoe UI, Arial, sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(56,189,248,.20), transparent 26%),
+    radial-gradient(circle at 85% 4%, rgba(37,99,235,.22), transparent 30%),
+    linear-gradient(135deg,var(--bg),#0b1220 48%,var(--bg2));
+  color:var(--text);
+  line-height:1.55;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:38px 38px;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,.9), transparent 85%);
+}
+header{
+  padding:32px 24px 24px;
+  background:linear-gradient(180deg, rgba(5,12,24,.96), rgba(8,17,32,.86));
+  position:sticky;
+  top:0;
+  z-index:20;
+  border-bottom:1px solid rgba(125,211,252,.20);
+  box-shadow:0 14px 40px rgba(0,0,0,.26);
+  backdrop-filter:blur(16px);
+}
+h1{
+  margin:0;
+  font-size:clamp(1.9rem,4.4vw,3.5rem);
+  letter-spacing:-1.2px;
+  line-height:1;
+  background:linear-gradient(90deg,#ffffff,#a5f3fc 55%,#7dd3fc);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.subtitle{
+  color:var(--muted);
+  margin-top:10px;
+  max-width:980px;
+  font-size:1.03rem;
+}
+nav{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:18px;
+  max-height:118px;
+  overflow:auto;
+  padding-bottom:2px;
+}
+button.tab{
+  border:1px solid rgba(125,211,252,.24);
+  background:rgba(18,33,58,.76);
+  color:var(--text);
+  padding:10px 15px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:800;
+  letter-spacing:.1px;
+  transition:transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+button.tab:hover{
+  transform:translateY(-1px);
+  border-color:rgba(56,189,248,.75);
+  background:rgba(29,51,85,.9);
+}
+button.tab.active{
+  background:linear-gradient(135deg,var(--accent),#60a5fa);
+  color:#04101f;
+  border-color:transparent;
+  box-shadow:0 10px 25px rgba(56,189,248,.28);
+}
+main{
+  max-width:1220px;
+  margin:0 auto;
+  padding:28px 22px 70px;
+}
+section{
+  display:none;
+  animation:fade .22s ease;
+}
+section.active{display:block}
+@keyframes fade{
+  from{opacity:.45; transform:translateY(6px)}
+  to{opacity:1; transform:none}
+}
+.card{
+  background:linear-gradient(180deg,rgba(23,37,61,.96),rgba(16,29,51,.96));
+  border:1px solid rgba(125,211,252,.18);
+  border-radius:22px;
+  padding:20px;
+  margin:16px 0;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.card:before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto 0;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),transparent 55%);
+  opacity:.75;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:16px;
+}
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin:16px 0;
+  overflow:hidden;
+  border-radius:16px;
+  border:1px solid rgba(125,211,252,.18);
+  box-shadow:0 12px 30px rgba(0,0,0,.16);
+}
+th,td{
+  border:0;
+  border-bottom:1px solid rgba(125,211,252,.14);
+  padding:12px;
+  vertical-align:top;
+}
+th{
+  background:linear-gradient(135deg,#1d3355,#21416d);
+  color:#e0f7ff;
+  font-size:.93rem;
+  text-align:left;
+}
+tr:nth-child(even) td{background:rgba(255,255,255,.035)}
+tr:hover td{background:rgba(56,189,248,.06)}
+h2{
+  color:#7dd3fc;
+  margin-top:34px;
+  margin-bottom:12px;
+  font-size:clamp(1.45rem,2.5vw,2.05rem);
+  letter-spacing:-.5px;
+}
+h2:after{
+  content:"";
+  display:block;
+  width:80px;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),transparent);
+  border-radius:999px;
+  margin-top:8px;
+}
+h3{
+  color:#bae6fd;
+  margin-top:22px;
+  margin-bottom:8px;
+  letter-spacing:-.2px;
+}
+p{color:#dbeafe}
+ul,ol{
+  line-height:1.72;
+  padding-left:1.35rem;
+}
+li{margin:.16rem 0}
+.badge{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(56,189,248,.13);
+  color:#c7f5ff;
+  border:1px solid rgba(56,189,248,.24);
+  font-size:.84rem;
+  font-weight:800;
+  margin:3px;
+}
+.note{
+  color:var(--muted);
+  font-size:.96rem;
+  background:rgba(255,255,255,.04);
+  border-left:3px solid rgba(56,189,248,.6);
+  padding:10px 12px;
+  border-radius:12px;
+}
+.quiz-controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin:14px 0;
+  padding:12px;
+  border:1px solid rgba(125,211,252,.15);
+  background:rgba(8,17,32,.45);
+  border-radius:18px;
+}
+.qcard{
+  background:linear-gradient(180deg,rgba(12,24,43,.98),rgba(16,27,47,.98));
+  border:1px solid rgba(125,211,252,.19);
+  border-radius:20px;
+  padding:18px;
+  margin:16px 0;
+  box-shadow:0 14px 35px rgba(0,0,0,.18);
+}
+.option{
+  display:block;
+  width:100%;
+  text-align:left;
+  background:rgba(23,37,61,.96);
+  color:var(--text);
+  border:1px solid rgba(125,211,252,.20);
+  padding:12px;
+  margin:9px 0;
+  border-radius:14px;
+  cursor:pointer;
+  transition:transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.option:hover{
+  transform:translateX(2px);
+  border-color:rgba(56,189,248,.72);
+  background:rgba(29,51,85,.95);
+}
+.option.correct{
+  border-color:var(--ok);
+  background:rgba(34,197,94,.14);
+}
+.option.wrong{
+  border-color:var(--bad);
+  background:rgba(239,68,68,.14);
+}
+.expl{
+  display:none;
+  padding:12px 14px;
+  border-left:4px solid var(--accent);
+  color:#d8e8ff;
+  background:rgba(56,189,248,.09);
+  border-radius:12px;
+  margin-top:8px;
+}
+.progress{
+  height:13px;
+  background:rgba(29,51,85,.9);
+  border-radius:999px;
+  overflow:hidden;
+  border:1px solid rgba(125,211,252,.12);
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#38bdf8,#22c55e);
+  box-shadow:0 0 18px rgba(56,189,248,.38);
+}
+input[type="search"]{
+  width:min(520px,100%);
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(125,211,252,.23);
+  background:rgba(8,17,32,.9);
+  color:var(--text);
+  outline:none;
+}
+input[type="search"]:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(56,189,248,.13);
+}
+.footer{
+  color:var(--muted);
+  margin-top:34px;
+  font-size:.93rem;
+  text-align:center;
+}
+.print{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  border:none;
+  border-radius:999px;
+  padding:13px 18px;
+  background:linear-gradient(135deg,#38bdf8,#60a5fa);
+  color:#06111f;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(0,0,0,.38);
+  z-index:30;
+}
+.print:hover{filter:brightness(1.08); transform:translateY(-1px)}
+details{
+  background:rgba(16,29,51,.8);
+  border:1px solid rgba(125,211,252,.16);
+  border-radius:18px;
+  padding:10px 14px;
+  margin:12px 0;
+}
+summary{
+  cursor:pointer;
+  color:#bae6fd;
+  font-weight:900;
+}
+code{
+  background:rgba(255,255,255,.08);
+  padding:2px 6px;
+  border-radius:7px;
+}
+strong,b{color:#ffffff}
+a{color:#7dd3fc}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#0b1220}
+::-webkit-scrollbar-thumb{background:#2d456c;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:#3b5f92}
+@media(max-width:760px){
+  header{position:relative}
+  main{padding:18px 14px 70px}
+  .card,.qcard{padding:16px;border-radius:18px}
+  table{display:block;overflow-x:auto}
+  button.tab{padding:9px 12px;font-size:.92rem}
+}
+@media print{
+  header,.print,.quiz-controls{display:none}
+  body{background:white;color:black}
+  body:before{display:none}
+  section{display:block}
+  .card,.qcard,table{border:1px solid #aaa;box-shadow:none;background:white;color:black}
+  h1,h2,h3,p,li,td,th,strong,b{color:black}
+}
+
+</style>
+
+<style id="atlas-images-css">
+.hero-image-atlas{
+  width:100%;
+  max-height:260px;
+  object-fit:cover;
+  border-radius:24px;
+  display:block;
+  margin:0 0 22px 0;
+  border:1px solid rgba(125,211,252,.22);
+  box-shadow:0 22px 48px rgba(0,0,0,.28);
+}
+@media(max-width:760px){.hero-image-atlas{max-height:170px;border-radius:18px}}
+@media print{.hero-image-atlas{display:none}}
+</style>
+
+</head>
+<body>
+<header>
+<h1>AP2 PSIQUIATRIA - MED 46</h1>
+<div class="subtitle">Conteúdo dividido por blocos • Modo treino com 100 questões • Cronograma até 18/06/2026</div>
+<nav>
+<button class="tab active" onclick="showTab('inicio')">Início</button>
+<button class="tab" onclick="showTab('estudar')">Estudar</button>
+<button class="tab" onclick="showTab('personalidade')">Transtornos de Personalidade</button>
+<button class="tab" onclick="showTab('spas')">SPAs</button>
+<button class="tab" onclick="showTab('humor')">Transtornos de Humor</button>
+<button class="tab" onclick="showTab('seminarios')">Seminários</button>
+<button class="tab" onclick="showTab('questoes')">100 Questões</button>
+<button class="tab" onclick="showTab('cronograma')">Cronograma</button>
+</nav>
+</header>
+<main>
+<section id="inicio" class="active">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2338bdf8%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Cpath%20d%3D%22M210%20145c-35-55-125-43-137%2020-49%2012-57%2083-8%20105-8%2062%2078%2088%20111%2039%2038%2045%20119%2012%20105-48%2049-34%2021-110-36-105-7-4-19-9-35-11z%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M160%20110v230M105%20190h110M110%20260h95M220%20170c20%2013%2028%2035%2020%2057%22%20stroke%3D%22white%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.8%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3EMapa%20da%20AP2%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3EPareto%2C%20blocos%20e%20revis%C3%A3o%20final%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco inicio">
+<div class="card">
+<h2>Resumo da AP2</h2>
+<p>A AP2 de Psiquiatria, pelo plano de ensino, cobra a matéria ministrada após a AP1 até a AP2. O cronograma oficial lista: transtornos de personalidade, transtornos relacionados com SPAs, transtornos de humor e seminários; a AP2 aparece em <b>19/06/2026</b>.</p>
+<div class="grid">
+<div class="card"><h3>Para buscar 80%</h3><p>Domine: antissocial/borderline, classificação dos grupos A-B-C, cocaína/álcool/BZD, depressão vs bipolaridade, efeitos colaterais e conduta em agitação/delirium.</p></div>
+<div class="card"><h3>Estilo da prova</h3><p>Questões curtas + casos clínicos + “exceto/incorreto”. A prova exige leitura semântica, não só decoreba.</p></div>
+<div class="card"><h3>Ordem de estudo</h3><p>1) Personalidade → 2) SPAs → 3) Humor → 4) Seminários/delirium/demência → 5) Simulado final.</p></div>
+</div>
+</div>
+<div class="card">
+<h2>Resumo Pareto Recursivo da AP2</h2>
+<p><b>Base:</b> plano de ensino + provas antigas + aulas/transcrições. A AP2 cobra conteúdo ministrado após a AP1 até o momento da AP2; no plano, a AP2 está em 19/06/2026.</p>
+<table><tr><th>Bloco</th><th>Probabilidade</th><th>% tempo</th><th>Por quê</th></tr>
+<tr><td>Transtornos de personalidade</td><td>🔥 Prioritário</td><td>30%</td><td>Recorrente em provas: grupos, antissocial, borderline, critérios, tratamento.</td></tr>
+<tr><td>SPAs</td><td>🔥 Prioritário</td><td>25%</td><td>Caso clínico de cocaína/álcool/BZD aparece muito; conduta e abstinência são cobradas.</td></tr>
+<tr><td>Transtornos de humor</td><td>🔥 Prioritário</td><td>25%</td><td>Depressão, bipolar, antidepressivos, virada maníaca e conduta.</td></tr>
+<tr><td>Seminários</td><td>🌤️ Complementar</td><td>15%</td><td>Esquizofrenia, ansiedade, violência, TGD; pode entrar objetivo/discursivo.</td></tr>
+<tr><td>Detalhes raros</td><td>❄️ Residual</td><td>5%</td><td>Epidemiologia minuciosa, autores e classificações antigas fora das pegadinhas.</td></tr></table>
+
+<h3>Régua de corte</h3>
+<ul>
+<li><b>Não começar por:</b> epidemiologia numérica detalhada, história da psiquiatria, teorias psicodinâmicas longas.</li>
+<li><b>Estudar por último:</b> raridades de personalidade, listas extensas de fármacos pouco cobrados.</li>
+<li><b>Não ignorar:</b> antissocial, borderline, cocaína, abstinência alcoólica, depressão vs bipolar, efeitos colaterais de ADT/antipsicóticos.</li>
+</ul>
+</div>
+</section>
+<section id="estudar">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2322c55e%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Crect%20x%3D%2270%22%20y%3D%2285%22%20width%3D%22260%22%20height%3D%22185%22%20rx%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22/%3E%3Cpath%20d%3D%22M105%20130h160M105%20170h110M105%20210h180%22%20stroke%3D%22white%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.85%22/%3E%3Cpath%20d%3D%22M125%20335h150M200%20270v65%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3EPlano%20de%20estudo%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3ETeoria%2C%20quest%C3%B5es%20e%20revis%C3%A3o%20ativa%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco estudar"><div class="card">
+<h2>Resumo Pareto Recursivo da AP2</h2>
+<p><b>Base:</b> plano de ensino + provas antigas + aulas/transcrições. A AP2 cobra conteúdo ministrado após a AP1 até o momento da AP2; no plano, a AP2 está em 19/06/2026.</p>
+<table><tr><th>Bloco</th><th>Probabilidade</th><th>% tempo</th><th>Por quê</th></tr>
+<tr><td>Transtornos de personalidade</td><td>🔥 Prioritário</td><td>30%</td><td>Recorrente em provas: grupos, antissocial, borderline, critérios, tratamento.</td></tr>
+<tr><td>SPAs</td><td>🔥 Prioritário</td><td>25%</td><td>Caso clínico de cocaína/álcool/BZD aparece muito; conduta e abstinência são cobradas.</td></tr>
+<tr><td>Transtornos de humor</td><td>🔥 Prioritário</td><td>25%</td><td>Depressão, bipolar, antidepressivos, virada maníaca e conduta.</td></tr>
+<tr><td>Seminários</td><td>🌤️ Complementar</td><td>15%</td><td>Esquizofrenia, ansiedade, violência, TGD; pode entrar objetivo/discursivo.</td></tr>
+<tr><td>Detalhes raros</td><td>❄️ Residual</td><td>5%</td><td>Epidemiologia minuciosa, autores e classificações antigas fora das pegadinhas.</td></tr></table>
+
+<h3>Régua de corte</h3>
+<ul>
+<li><b>Não começar por:</b> epidemiologia numérica detalhada, história da psiquiatria, teorias psicodinâmicas longas.</li>
+<li><b>Estudar por último:</b> raridades de personalidade, listas extensas de fármacos pouco cobrados.</li>
+<li><b>Não ignorar:</b> antissocial, borderline, cocaína, abstinência alcoólica, depressão vs bipolar, efeitos colaterais de ADT/antipsicóticos.</li>
+</ul>
+
+<h2>Transtornos de Personalidade — bloco quente</h2>
+<p><b>Definição-chave:</b> padrão persistente de experiência interna e comportamento que se desvia da cultura, é inflexível, começa na adolescência/início da vida adulta, é estável e causa prejuízo ou sofrimento. A personalidade normal é relativamente estável e previsível; vira transtorno quando o traço mal ajustado causa comprometimento funcional.</p>
+<div class='grid'>
+<div class='card'><h3>Conceitos que caem</h3><ul>
+<li><b>Ego-sintônico:</b> o paciente costuma aceitar o traço como “sou assim mesmo”.</li>
+<li><b>Autoplástico:</b> o padrão modifica o ambiente e confirma o próprio funcionamento.</li>
+<li><b>Diagnóstico:</b> em geral, apenas após 18 anos; antes: transtorno de conduta ou opositor desafiante.</li>
+<li><b>Tratamento:</b> psicoterapia é base; fármacos são coadjuvantes/sintomáticos.</li>
+</ul></div>
+<div class='card'><h3>Grupos DSM</h3><ul>
+<li><b>Grupo A:</b> paranoide, esquizoide, esquizotípico — esquisitos/excêntricos.</li>
+<li><b>Grupo B:</b> antissocial, borderline, histriônico, narcisista — dramáticos/emotivos/erráticos.</li>
+<li><b>Grupo C:</b> esquiva, dependente, obsessivo-compulsivo — ansiosos/temerosos.</li>
+</ul></div></div>
+<h3>Grupo A</h3>
+<table><tr><th>Transtorno</th><th>Como reconhecer</th><th>Pegadinha</th></tr>
+<tr><td>Paranoide</td><td>Desconfiança, interpreta humilhação/ameaça, ciúme patológico, “colecionador de injustiças”.</td><td>Não é delírio fixo; é estilo persistente de suspeita.</td></tr>
+<tr><td>Esquizoide</td><td>Isolamento, pouco desejo de vínculos, afeto constrito, preferência por atividades solitárias.</td><td>Isola-se porque prefere distanciamento.</td></tr>
+<tr><td>Esquizotípico</td><td>Excentricidade, pensamento mágico, ideias de referência, discurso estranho, isolamento.</td><td>Pode ter sintomas psicóticos breves sob tensão; relação com esquizofrenia.</td></tr></table>
+<h3>Grupo B — prioridade máxima</h3>
+<table><tr><th>Transtorno</th><th>Como reconhecer em caso clínico</th><th>Conduta/obs.</th></tr>
+<tr><td>Antissocial</td><td>Desrespeito a normas, mentira, impulsividade, ausência de remorso, agressividade ou exploração. Mais comum em homens; antes dos 18 anos pensar em conduta.</td><td>Responsabilização; psicoterapia tem baixa adesão; não confundir com inimputabilidade.</td></tr>
+<tr><td>Borderline</td><td>Instabilidade afetiva, relações intensas e instáveis, autoimagem instável, medo de abandono, impulsividade.</td><td>Diferencial com bipolar: oscilações do TPB são reativas e rápidas; psicoterapia é central.</td></tr>
+<tr><td>Histriônico</td><td>Busca atenção, teatralidade, expressão emocional intensa/superficial, sedução inadequada.</td><td>Fala com muito drama; não é necessariamente transtorno se não há prejuízo.</td></tr>
+<tr><td>Narcisista</td><td>Grandiosidade, necessidade de admiração, pouca empatia, sensibilidade a críticas.</td><td>Diferenciar autoconfiança de padrão inflexível com prejuízo.</td></tr></table>
+<h3>Grupo C</h3>
+<table><tr><th>Transtorno</th><th>Marca clínica</th><th>Diferencial</th></tr>
+<tr><td>Esquiva</td><td>Evita contato por medo de crítica/rejeição; deseja vínculo, mas teme.</td><td>Diferente do esquizoide, que não deseja tanto vínculo.</td></tr>
+<tr><td>Dependente</td><td>Necessidade de cuidado, dificuldade de decidir, medo de separação.</td><td>Submissão para manter suporte.</td></tr>
+<tr><td>Obsessivo-compulsivo</td><td>Perfeccionismo, controle, rigidez, ordem, produtividade acima do lazer.</td><td>Diferente de TOC: não precisa ter obsessões/compulsões egodistônicas.</td></tr></table>
+
+
+<h2>Transtornos Relacionados com Substâncias Psicoativas — bloco quente</h2>
+<p><b>Ideia central:</b> diferenciar uso, abuso/uso nocivo, dependência, intoxicação, abstinência e comorbidades. Em prova antiga aparece muito caso clínico com cocaína, maconha, álcool, benzodiazepínicos e conduta.</p>
+<div class='grid'><div class='card'><h3>Critérios práticos</h3><ul>
+<li><b>Abuso/uso nocivo:</b> uso com prejuízo, mas sem padrão claro de tolerância/abstinência.</li>
+<li><b>Dependência:</b> perda de controle, tolerância, abstinência, saliência do uso e manutenção apesar de dano.</li>
+<li><b>Intoxicação:</b> sintomas durante/após uso.</li>
+<li><b>Abstinência:</b> sintomas após redução/suspensão.</li>
+</ul></div>
+<div class='card'><h3>Tratamento geral</h3><ul>
+<li>Preferência inicial: abordagem ambulatorial quando possível.</li>
+<li>Objetivos: abstinência total ou redução de danos + bem-estar biopsicossocial.</li>
+<li>Internação: falha ambulatorial, risco, gravidade clínica/psiquiátrica, vulnerabilidade importante.</li>
+<li>Comorbidade: tratar transtorno de base se persistente após abstinência.</li>
+</ul></div></div>
+<h3>Cocaína</h3>
+<table><tr><th>Aspecto</th><th>O que memorizar</th></tr>
+<tr><td>Vias</td><td>Aspirada, fumada/crack, intravenosa, subcutânea.</td></tr>
+<tr><td>Baixas doses</td><td>Excitação psíquica, euforia, aumento da autoestima, sensação de melhora física/mental.</td></tr>
+<tr><td>Altas doses</td><td>Agitação, irritabilidade, alteração do julgamento, comportamento impulsivo, agressividade, sintomas maniformes/psicóticos.</td></tr>
+<tr><td>Abstinência</td><td>Disforia, irritabilidade, ansiedade, fadiga, hipersonolência, fome; pode haver risco comportamental.</td></tr>
+<tr><td>Comorbidades</td><td>Ansiedade, antissocial, transtorno do humor, álcool.</td></tr>
+<tr><td>Complicações</td><td>Congestão nasal, perfuração de septo, danos brônquicos, risco infeccioso se injetável.</td></tr></table>
+<h3>Álcool e sedativos</h3>
+<ul>
+<li><b>Abstinência alcoólica:</b> benzodiazepínico é terapia clássica; diazepam é muito usado; lorazepam pode ser preferido em idoso/hepatopata.</li>
+<li><b>Disulfiram:</b> aversivo; exige consentimento e cuidado.</li>
+<li><b>Naltrexona:</b> antagonista opioide; reduz prazer/fissura em álcool e opioides.</li>
+<li><b>Topiramato:</b> anticraving em álcool/cocaína.</li>
+<li><b>Bupropiona:</b> dependência de nicotina.</li>
+<li><b>Prometazina:</b> sedação leve/insônia/craving, sem dependência como BZD.</li>
+</ul>
+<h3>Maconha/cannabis</h3>
+<ul>
+<li>Pode estar associada a quadros ansiosos, sintomas psicóticos, alterações cognitivas e desmotivação em usuários vulneráveis.</li>
+<li>Em caso de psicose desencadeada por cannabis: avaliar abstinência, risco, antipsicótico se necessário e acompanhamento.</li>
+</ul>
+
+
+<h2>Transtornos de Humor — bloco quente</h2>
+<p><b>Regra de prova:</b> humor é estado subjetivo persistente; afeto é expressão observável. Depressão é transtorno do humor, não do afeto.</p>
+<div class='grid'><div class='card'><h3>Depressão: núcleo</h3><ul>
+<li>Humor deprimido, perda de interesse e perda de prazer.</li>
+<li>Comprometimento funcional é obrigatório para relevância clínica.</li>
+<li>Sintomas comuns: baixa energia, sono alterado, ansiedade, apetite/peso alterados, concentração ruim, pensamento lentificado.</li>
+<li>Idosos: queixas somáticas, memória e pseudodemência.</li>
+</ul></div>
+<div class='card'><h3>Diferenciais orgânicos</h3><ul>
+<li>Anemia, hipotireoidismo, deficiência vitamínica, diabetes, doenças neurológicas, tumores, Parkinson, demências, epilepsia.</li>
+<li>Medicamentos: corticoides, anti-hipertensivos, antineoplásicos, reserpina.</li>
+<li>Antes de fechar diagnóstico: eliminar causas orgânicas e substâncias.</li>
+</ul></div></div>
+<h3>Tratamento da depressão</h3>
+<table><tr><th>Situação</th><th>Conduta de prova</th></tr>
+<tr><td>Leve</td><td>Psicoterapia ou farmacoterapia isolada podem ser efetivas; acompanhamento.</td></tr>
+<tr><td>Moderada/grave</td><td>Psicoterapia + farmacoterapia costuma ser mais efetiva.</td></tr>
+<tr><td>Início de antidepressivo</td><td>Explicar latência de resposta; pode haver uso curto de BZD para ansiedade/insônia no início.</td></tr>
+<tr><td>Risco importante ou incapacidade de autocuidado</td><td>Considerar hospitalização e segurança.</td></tr>
+<tr><td>Resposta parcial em dose máxima</td><td>Potencialização: lítio, liotironina, triptofano, estimulantes, conforme caso.</td></tr></table>
+<h3>Antidepressivos — pegadinhas</h3>
+<ul>
+<li><b>ISRS:</b> padrão frequente por tolerabilidade; latência de semanas.</li>
+<li><b>Tricíclicos:</b> mais efeitos colaterais, incluindo hipotensão ortostática e efeitos anticolinérgicos.</li>
+<li><b>Interromper cedo demais:</b> risco de retorno dos sintomas.</li>
+<li><b>Virada maníaca/hipomaníaca:</b> antidepressivo pode precipitar em paciente bipolar.</li>
+</ul>
+<h3>Transtorno bipolar</h3>
+<table><tr><th>Quadro</th><th>Essência</th><th>Conduta</th></tr>
+<tr><td>Mania</td><td>Humor elevado/irritável, energia aumentada, grandiosidade, menor sono, impulsividade, prejuízo ou psicose.</td><td>Estabilizador de humor e/ou antipsicótico; evitar antidepressivo isolado.</td></tr>
+<tr><td>Hipomania</td><td>Sem gravidade funcional/psicótica da mania; pode ser precipitada por antidepressivo.</td><td>Reavaliar diagnóstico; estabilizador.</td></tr>
+<tr><td>Depressão bipolar</td><td>Pistas: hipersonia, retardo, psicose, pós-parto, história familiar, episódios prévios de mania/hipomania.</td><td>Não tratar como depressão unipolar simples.</td></tr></table>
+<h3>Emergência comportamental associada</h3>
+<p>Agitação psicótica/maniforme: contenção verbal e ambiente seguro; se necessário, antipsicótico + benzodiazepínico, monitorando nível de consciência. Em abstinência alcoólica, BZD é central.</p>
+
+
+<h2>Seminários — provável bloco complementar</h2>
+<p>O plano de ensino inclui seminários após a AP1, especialmente esquizofrenia, transtornos de ansiedade, violência e saúde mental e transtorno global do desenvolvimento. Eles entram como nota e podem aparecer em questões objetivas/discursivas.</p>
+<h3>Esquizofrenia</h3>
+<ul>
+<li>Sintomas positivos: delírios, alucinações, discurso/pensamento desorganizado.</li>
+<li>Sintomas negativos: embotamento afetivo, avolia, alogia, anedonia, retraimento.</li>
+<li>Conduta: antipsicóticos; avaliar efeitos extrapiramidais, adesão e risco.</li>
+<li>Efeitos extrapiramidais: distonia aguda, parkinsonismo, acatisia; manejo com biperideno/prometazina conforme situação.</li>
+</ul>
+<h3>Transtornos de ansiedade</h3>
+<ul>
+<li>Pânico: crises abruptas com sintomas autonômicos e medo intenso.</li>
+<li>TAG: preocupação excessiva e persistente.</li>
+<li>Fobias: medo circunscrito; agorafobia envolve lugares/situações de difícil escape.</li>
+<li>Tratamento: ISRS/ISRSN e psicoterapia; BZD apenas curto prazo/pontual.</li>
+</ul>
+<h3>Violência e saúde mental</h3>
+<ul>
+<li>Nem todo transtorno mental aumenta violência; risco sobe com intoxicação, impulsividade, psicose ativa, histórico de violência, acesso a meios e baixa rede.</li>
+<li>Na abordagem: segurança da equipe, entrevista respeitosa, reduzir estímulos, não confrontar delírio diretamente.</li>
+</ul>
+<h3>Transtorno global do desenvolvimento / TEA</h3>
+<ul>
+<li>Déficits de comunicação/interação social + padrões restritos/repetitivos.</li>
+<li>Avaliar desenvolvimento, linguagem, seletividade, interesses fixos, sensibilidade sensorial.</li>
+<li>Conduta: intervenção multiprofissional precoce; manejo de comorbidades.</li>
+</ul>
+<h3>Delirium e demências — reaparece em AP2 antiga</h3>
+<ul>
+<li><b>Delirium:</b> início agudo, flutuação, desatenção, desorientação, causa orgânica/medicamentosa.</li>
+<li><b>Demência:</b> curso progressivo, prejuízo cognitivo funcional; investigar causas reversíveis: B12, tireoide, eletrólitos, infecções conforme caso.</li>
+<li>Delirium: tratar causa, orientar no tempo/espaço, relógio/calendário, mobilização, ambiente adequado; haloperidol pode ser usado para agitação, não para “curar delirium”.</li>
+</ul>
+</div></section>
+<section id="personalidade">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23a855f7%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Ccircle%20cx%3D%22180%22%20cy%3D%22120%22%20r%3D%2246%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22/%3E%3Cpath%20d%3D%22M85%20330c14-82%2058-124%2095-124s81%2042%2095%20124%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M292%2096l44%2044-86%2086-47%209%209-47z%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2210%22%20stroke-linejoin%3D%22round%22%20opacity%3D%22.85%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3EPersonalidade%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3EClusters%2C%20padr%C3%B5es%20e%20pegadinhas%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco personalidade"><div class="card">
+<h2>Transtornos de Personalidade — bloco quente</h2>
+<p><b>Definição-chave:</b> padrão persistente de experiência interna e comportamento que se desvia da cultura, é inflexível, começa na adolescência/início da vida adulta, é estável e causa prejuízo ou sofrimento. A personalidade normal é relativamente estável e previsível; vira transtorno quando o traço mal ajustado causa comprometimento funcional.</p>
+<div class='grid'>
+<div class='card'><h3>Conceitos que caem</h3><ul>
+<li><b>Ego-sintônico:</b> o paciente costuma aceitar o traço como “sou assim mesmo”.</li>
+<li><b>Autoplástico:</b> o padrão modifica o ambiente e confirma o próprio funcionamento.</li>
+<li><b>Diagnóstico:</b> em geral, apenas após 18 anos; antes: transtorno de conduta ou opositor desafiante.</li>
+<li><b>Tratamento:</b> psicoterapia é base; fármacos são coadjuvantes/sintomáticos.</li>
+</ul></div>
+<div class='card'><h3>Grupos DSM</h3><ul>
+<li><b>Grupo A:</b> paranoide, esquizoide, esquizotípico — esquisitos/excêntricos.</li>
+<li><b>Grupo B:</b> antissocial, borderline, histriônico, narcisista — dramáticos/emotivos/erráticos.</li>
+<li><b>Grupo C:</b> esquiva, dependente, obsessivo-compulsivo — ansiosos/temerosos.</li>
+</ul></div></div>
+<h3>Grupo A</h3>
+<table><tr><th>Transtorno</th><th>Como reconhecer</th><th>Pegadinha</th></tr>
+<tr><td>Paranoide</td><td>Desconfiança, interpreta humilhação/ameaça, ciúme patológico, “colecionador de injustiças”.</td><td>Não é delírio fixo; é estilo persistente de suspeita.</td></tr>
+<tr><td>Esquizoide</td><td>Isolamento, pouco desejo de vínculos, afeto constrito, preferência por atividades solitárias.</td><td>Isola-se porque prefere distanciamento.</td></tr>
+<tr><td>Esquizotípico</td><td>Excentricidade, pensamento mágico, ideias de referência, discurso estranho, isolamento.</td><td>Pode ter sintomas psicóticos breves sob tensão; relação com esquizofrenia.</td></tr></table>
+<h3>Grupo B — prioridade máxima</h3>
+<table><tr><th>Transtorno</th><th>Como reconhecer em caso clínico</th><th>Conduta/obs.</th></tr>
+<tr><td>Antissocial</td><td>Desrespeito a normas, mentira, impulsividade, ausência de remorso, agressividade ou exploração. Mais comum em homens; antes dos 18 anos pensar em conduta.</td><td>Responsabilização; psicoterapia tem baixa adesão; não confundir com inimputabilidade.</td></tr>
+<tr><td>Borderline</td><td>Instabilidade afetiva, relações intensas e instáveis, autoimagem instável, medo de abandono, impulsividade.</td><td>Diferencial com bipolar: oscilações do TPB são reativas e rápidas; psicoterapia é central.</td></tr>
+<tr><td>Histriônico</td><td>Busca atenção, teatralidade, expressão emocional intensa/superficial, sedução inadequada.</td><td>Fala com muito drama; não é necessariamente transtorno se não há prejuízo.</td></tr>
+<tr><td>Narcisista</td><td>Grandiosidade, necessidade de admiração, pouca empatia, sensibilidade a críticas.</td><td>Diferenciar autoconfiança de padrão inflexível com prejuízo.</td></tr></table>
+<h3>Grupo C</h3>
+<table><tr><th>Transtorno</th><th>Marca clínica</th><th>Diferencial</th></tr>
+<tr><td>Esquiva</td><td>Evita contato por medo de crítica/rejeição; deseja vínculo, mas teme.</td><td>Diferente do esquizoide, que não deseja tanto vínculo.</td></tr>
+<tr><td>Dependente</td><td>Necessidade de cuidado, dificuldade de decidir, medo de separação.</td><td>Submissão para manter suporte.</td></tr>
+<tr><td>Obsessivo-compulsivo</td><td>Perfeccionismo, controle, rigidez, ordem, produtividade acima do lazer.</td><td>Diferente de TOC: não precisa ter obsessões/compulsões egodistônicas.</td></tr></table>
+</div></section>
+<section id="spas">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23f59e0b%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Cpath%20d%3D%22M125%20105h110M145%20105v75l-48%2095c-18%2036%208%2078%2048%2078h70c40%200%2066-42%2048-78l-48-95v-75%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M125%20270h110M135%20310h90%22%20stroke%3D%22white%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.8%22/%3E%3Ccircle%20cx%3D%22250%22%20cy%3D%22145%22%20r%3D%2218%22%20fill%3D%22white%22%20opacity%3D%22.7%22/%3E%3Ccircle%20cx%3D%22285%22%20cy%3D%22105%22%20r%3D%2210%22%20fill%3D%22white%22%20opacity%3D%22.55%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3ESPAs%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3EIntoxica%C3%A7%C3%A3o%2C%20abstin%C3%AAncia%20e%20condutas%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco spas"><div class="card">
+<h2>Transtornos Relacionados com Substâncias Psicoativas — bloco quente</h2>
+<p><b>Ideia central:</b> diferenciar uso, abuso/uso nocivo, dependência, intoxicação, abstinência e comorbidades. Em prova antiga aparece muito caso clínico com cocaína, maconha, álcool, benzodiazepínicos e conduta.</p>
+<div class='grid'><div class='card'><h3>Critérios práticos</h3><ul>
+<li><b>Abuso/uso nocivo:</b> uso com prejuízo, mas sem padrão claro de tolerância/abstinência.</li>
+<li><b>Dependência:</b> perda de controle, tolerância, abstinência, saliência do uso e manutenção apesar de dano.</li>
+<li><b>Intoxicação:</b> sintomas durante/após uso.</li>
+<li><b>Abstinência:</b> sintomas após redução/suspensão.</li>
+</ul></div>
+<div class='card'><h3>Tratamento geral</h3><ul>
+<li>Preferência inicial: abordagem ambulatorial quando possível.</li>
+<li>Objetivos: abstinência total ou redução de danos + bem-estar biopsicossocial.</li>
+<li>Internação: falha ambulatorial, risco, gravidade clínica/psiquiátrica, vulnerabilidade importante.</li>
+<li>Comorbidade: tratar transtorno de base se persistente após abstinência.</li>
+</ul></div></div>
+<h3>Cocaína</h3>
+<table><tr><th>Aspecto</th><th>O que memorizar</th></tr>
+<tr><td>Vias</td><td>Aspirada, fumada/crack, intravenosa, subcutânea.</td></tr>
+<tr><td>Baixas doses</td><td>Excitação psíquica, euforia, aumento da autoestima, sensação de melhora física/mental.</td></tr>
+<tr><td>Altas doses</td><td>Agitação, irritabilidade, alteração do julgamento, comportamento impulsivo, agressividade, sintomas maniformes/psicóticos.</td></tr>
+<tr><td>Abstinência</td><td>Disforia, irritabilidade, ansiedade, fadiga, hipersonolência, fome; pode haver risco comportamental.</td></tr>
+<tr><td>Comorbidades</td><td>Ansiedade, antissocial, transtorno do humor, álcool.</td></tr>
+<tr><td>Complicações</td><td>Congestão nasal, perfuração de septo, danos brônquicos, risco infeccioso se injetável.</td></tr></table>
+<h3>Álcool e sedativos</h3>
+<ul>
+<li><b>Abstinência alcoólica:</b> benzodiazepínico é terapia clássica; diazepam é muito usado; lorazepam pode ser preferido em idoso/hepatopata.</li>
+<li><b>Disulfiram:</b> aversivo; exige consentimento e cuidado.</li>
+<li><b>Naltrexona:</b> antagonista opioide; reduz prazer/fissura em álcool e opioides.</li>
+<li><b>Topiramato:</b> anticraving em álcool/cocaína.</li>
+<li><b>Bupropiona:</b> dependência de nicotina.</li>
+<li><b>Prometazina:</b> sedação leve/insônia/craving, sem dependência como BZD.</li>
+</ul>
+<h3>Maconha/cannabis</h3>
+<ul>
+<li>Pode estar associada a quadros ansiosos, sintomas psicóticos, alterações cognitivas e desmotivação em usuários vulneráveis.</li>
+<li>Em caso de psicose desencadeada por cannabis: avaliar abstinência, risco, antipsicótico se necessário e acompanhamento.</li>
+</ul>
+</div></section>
+<section id="humor">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fb7185%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Cpath%20d%3D%22M70%20260c52-100%2095-100%20130%200s78%20100%20130%200%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2214%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%22130%22%20r%3D%2242%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2211%22/%3E%3Cpath%20d%3D%22M90%20137c13%2016%2028%2016%2041%200%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%22275%22%20cy%3D%22130%22%20r%3D%2242%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2211%22/%3E%3Cpath%20d%3D%22M255%20150c13-16%2028-16%2041%200%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3EHumor%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3EDepress%C3%A3o%2C%20bipolaridade%20e%20risco%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco humor"><div class="card">
+<h2>Transtornos de Humor — bloco quente</h2>
+<p><b>Regra de prova:</b> humor é estado subjetivo persistente; afeto é expressão observável. Depressão é transtorno do humor, não do afeto.</p>
+<div class='grid'><div class='card'><h3>Depressão: núcleo</h3><ul>
+<li>Humor deprimido, perda de interesse e perda de prazer.</li>
+<li>Comprometimento funcional é obrigatório para relevância clínica.</li>
+<li>Sintomas comuns: baixa energia, sono alterado, ansiedade, apetite/peso alterados, concentração ruim, pensamento lentificado.</li>
+<li>Idosos: queixas somáticas, memória e pseudodemência.</li>
+</ul></div>
+<div class='card'><h3>Diferenciais orgânicos</h3><ul>
+<li>Anemia, hipotireoidismo, deficiência vitamínica, diabetes, doenças neurológicas, tumores, Parkinson, demências, epilepsia.</li>
+<li>Medicamentos: corticoides, anti-hipertensivos, antineoplásicos, reserpina.</li>
+<li>Antes de fechar diagnóstico: eliminar causas orgânicas e substâncias.</li>
+</ul></div></div>
+<h3>Tratamento da depressão</h3>
+<table><tr><th>Situação</th><th>Conduta de prova</th></tr>
+<tr><td>Leve</td><td>Psicoterapia ou farmacoterapia isolada podem ser efetivas; acompanhamento.</td></tr>
+<tr><td>Moderada/grave</td><td>Psicoterapia + farmacoterapia costuma ser mais efetiva.</td></tr>
+<tr><td>Início de antidepressivo</td><td>Explicar latência de resposta; pode haver uso curto de BZD para ansiedade/insônia no início.</td></tr>
+<tr><td>Risco importante ou incapacidade de autocuidado</td><td>Considerar hospitalização e segurança.</td></tr>
+<tr><td>Resposta parcial em dose máxima</td><td>Potencialização: lítio, liotironina, triptofano, estimulantes, conforme caso.</td></tr></table>
+<h3>Antidepressivos — pegadinhas</h3>
+<ul>
+<li><b>ISRS:</b> padrão frequente por tolerabilidade; latência de semanas.</li>
+<li><b>Tricíclicos:</b> mais efeitos colaterais, incluindo hipotensão ortostática e efeitos anticolinérgicos.</li>
+<li><b>Interromper cedo demais:</b> risco de retorno dos sintomas.</li>
+<li><b>Virada maníaca/hipomaníaca:</b> antidepressivo pode precipitar em paciente bipolar.</li>
+</ul>
+<h3>Transtorno bipolar</h3>
+<table><tr><th>Quadro</th><th>Essência</th><th>Conduta</th></tr>
+<tr><td>Mania</td><td>Humor elevado/irritável, energia aumentada, grandiosidade, menor sono, impulsividade, prejuízo ou psicose.</td><td>Estabilizador de humor e/ou antipsicótico; evitar antidepressivo isolado.</td></tr>
+<tr><td>Hipomania</td><td>Sem gravidade funcional/psicótica da mania; pode ser precipitada por antidepressivo.</td><td>Reavaliar diagnóstico; estabilizador.</td></tr>
+<tr><td>Depressão bipolar</td><td>Pistas: hipersonia, retardo, psicose, pós-parto, história familiar, episódios prévios de mania/hipomania.</td><td>Não tratar como depressão unipolar simples.</td></tr></table>
+<h3>Emergência comportamental associada</h3>
+<p>Agitação psicótica/maniforme: contenção verbal e ambiente seguro; se necessário, antipsicótico + benzodiazepínico, monitorando nível de consciência. Em abstinência alcoólica, BZD é central.</p>
+</div></section>
+<section id="seminarios">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2306b6d4%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Crect%20x%3D%2270%22%20y%3D%2285%22%20width%3D%22260%22%20height%3D%22185%22%20rx%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22/%3E%3Cpath%20d%3D%22M105%20130h160M105%20170h110M105%20210h180%22%20stroke%3D%22white%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.85%22/%3E%3Cpath%20d%3D%22M125%20335h150M200%20270v65%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3ESemin%C3%A1rios%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3ETemas%20complementares%20da%20AP2%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco seminarios"><div class="card">
+<h2>Seminários — provável bloco complementar</h2>
+<p>O plano de ensino inclui seminários após a AP1, especialmente esquizofrenia, transtornos de ansiedade, violência e saúde mental e transtorno global do desenvolvimento. Eles entram como nota e podem aparecer em questões objetivas/discursivas.</p>
+<h3>Esquizofrenia</h3>
+<ul>
+<li>Sintomas positivos: delírios, alucinações, discurso/pensamento desorganizado.</li>
+<li>Sintomas negativos: embotamento afetivo, avolia, alogia, anedonia, retraimento.</li>
+<li>Conduta: antipsicóticos; avaliar efeitos extrapiramidais, adesão e risco.</li>
+<li>Efeitos extrapiramidais: distonia aguda, parkinsonismo, acatisia; manejo com biperideno/prometazina conforme situação.</li>
+</ul>
+<h3>Transtornos de ansiedade</h3>
+<ul>
+<li>Pânico: crises abruptas com sintomas autonômicos e medo intenso.</li>
+<li>TAG: preocupação excessiva e persistente.</li>
+<li>Fobias: medo circunscrito; agorafobia envolve lugares/situações de difícil escape.</li>
+<li>Tratamento: ISRS/ISRSN e psicoterapia; BZD apenas curto prazo/pontual.</li>
+</ul>
+<h3>Violência e saúde mental</h3>
+<ul>
+<li>Nem todo transtorno mental aumenta violência; risco sobe com intoxicação, impulsividade, psicose ativa, histórico de violência, acesso a meios e baixa rede.</li>
+<li>Na abordagem: segurança da equipe, entrevista respeitosa, reduzir estímulos, não confrontar delírio diretamente.</li>
+</ul>
+<h3>Transtorno global do desenvolvimento / TEA</h3>
+<ul>
+<li>Déficits de comunicação/interação social + padrões restritos/repetitivos.</li>
+<li>Avaliar desenvolvimento, linguagem, seletividade, interesses fixos, sensibilidade sensorial.</li>
+<li>Conduta: intervenção multiprofissional precoce; manejo de comorbidades.</li>
+</ul>
+<h3>Delirium e demências — reaparece em AP2 antiga</h3>
+<ul>
+<li><b>Delirium:</b> início agudo, flutuação, desatenção, desorientação, causa orgânica/medicamentosa.</li>
+<li><b>Demência:</b> curso progressivo, prejuízo cognitivo funcional; investigar causas reversíveis: B12, tireoide, eletrólitos, infecções conforme caso.</li>
+<li>Delirium: tratar causa, orientar no tempo/espaço, relógio/calendário, mobilização, ambiente adequado; haloperidol pode ser usado para agitação, não para “curar delirium”.</li>
+</ul>
+</div></section>
+<section id="questoes">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%233b82f6%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Cpath%20d%3D%22M122%20108c14-32%2045-50%2082-50%2052%200%2088%2030%2088%2074%200%2050-42%2067-67%2089-18%2016-22%2030-22%2055%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2214%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%22203%22%20cy%3D%22330%22%20r%3D%2211%22%20fill%3D%22white%22/%3E%3Cpath%20d%3D%22M80%2080h-22v260h22M320%2080h22v260h-22%22%20stroke%3D%22white%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.55%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3E100%2B%20Quest%C3%B5es%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3ETreino%20por%20blocos%20e%20desempenho%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco questoes">
+<div class="card">
+<h2>Modo treino — 100 questões</h2>
+<p class="note">Questões baseadas nos padrões das provas antigas e nos tópicos dos arquivos. Clique numa alternativa para ver o comentário.</p>
+<div class="quiz-controls">
+<input type="search" id="search" placeholder="Filtrar por termo: borderline, cocaína, depressão..." oninput="renderQuiz()">
+<button class="tab" onclick="resetQuiz()">Resetar</button>
+<span class="badge" id="score">Acertos: 0/0</span>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div id="quiz"></div>
+</div>
+</section>
+<section id="cronograma">
+<img class="hero-image-atlas" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20360%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2314b8a6%22%20offset%3D%220%22/%3E%3Cstop%20stop-color%3D%22%232563eb%22%20offset%3D%22.55%22/%3E%3Cstop%20stop-color%3D%22%230f172a%22%20offset%3D%221%22/%3E%3C/linearGradient%3E%3Cfilter%20id%3D%22shadow%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2214%22%20stdDeviation%3D%2218%22%20flood-opacity%3D%22.3%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22720%22%20height%3D%22360%22%20rx%3D%2234%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22590%22%20cy%3D%2275%22%20r%3D%22140%22%20fill%3D%22white%22%20opacity%3D%22.09%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%22310%22%20r%3D%22110%22%20fill%3D%22white%22%20opacity%3D%22.07%22/%3E%0A%3Cg%20transform%3D%22translate%28340%200%29%22%20opacity%3D%22.95%22%20filter%3D%22url%28%23shadow%29%22%3E%3Crect%20x%3D%2270%22%20y%3D%2295%22%20width%3D%22260%22%20height%3D%22235%22%20rx%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22/%3E%3Cpath%20d%3D%22M70%20155h260M130%2070v55M270%2070v55%22%20stroke%3D%22white%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M120%20205h35M185%20205h35M250%20205h35M120%20255h35M185%20255h35M250%20255h35%22%20stroke%3D%22white%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.85%22/%3E%3C/g%3E%0A%3Ctext%20x%3D%2244%22%20y%3D%22120%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22800%22%20fill%3D%22white%22%3ECronograma%3C/text%3E%0A%3Ctext%20x%3D%2246%22%20y%3D%22165%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2221%22%20fill%3D%22%23dff6ff%22%3EReta%20final%20at%C3%A9%20a%20prova%3C/text%3E%0A%3Cpath%20d%3D%22M48%20205h235%22%20stroke%3D%22white%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%0A%3Ctext%20x%3D%2248%22%20y%3D%22255%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20opacity%3D%22.9%22%3EAP2%20PSIQUIATRIA%20%E2%80%A2%20MED%2046%3C/text%3E%0A%3C/svg%3E" alt="Imagem visual do bloco cronograma">
+<div class="card">
+<h2>Cronograma de estudos — de hoje até 1 dia antes da AP2</h2>
+<p>Data considerada: hoje 12/06/2026; AP2 em 19/06/2026; portanto o cronograma vai até 18/06/2026.</p>
+<table><tr><th>Data</th><th>Dia</th><th>Carga</th><th>Subtópico exato</th><th>Distribuição</th></tr>
+<tr><td>12/06/2026</td><td>Sexta</td><td>2h30</td><td>Pareto + Personalidade: conceito, grupos, antissocial/borderline</td><td>Teoria 45min + questões 75min + revisão 30min</td></tr><tr><td>13/06/2026</td><td>Sábado</td><td>4h</td><td>Personalidade completa + SPAs introdução/cocaína</td><td>Teoria 70min + questões 130min + revisão 40min</td></tr><tr><td>14/06/2026</td><td>Domingo</td><td>3h</td><td>SPAs: álcool, BZD, cannabis, tratamentos</td><td>Teoria 55min + questões 90min + revisão 35min</td></tr><tr><td>15/06/2026</td><td>Segunda</td><td>3h</td><td>Humor: depressão, diferenciais orgânicos, tratamento</td><td>Teoria 55min + questões 90min + revisão 35min</td></tr><tr><td>16/06/2026</td><td>Terça</td><td>3h</td><td>Bipolaridade, antidepressivos, virada maníaca, lítio/valproato</td><td>Teoria 55min + questões 90min + revisão 35min</td></tr><tr><td>17/06/2026</td><td>Quarta</td><td>3h</td><td>Seminários: esquizofrenia, ansiedade, violência, TGD + Delirium/demência</td><td>Teoria 55min + questões 90min + revisão 35min</td></tr><tr><td>18/06/2026</td><td>Quinta</td><td>4h</td><td>Simulado final 100 questões + revisão dos erros + decoreba final</td><td>Questões 140min + revisão 80min + mapa mental 20min</td></tr>
+</table>
+<h3>Revisão espaçada</h3>
+<ul>
+<li>Todo bloco começa com 10 min revisando o dia anterior.</li>
+<li>Todo bloco termina com 20–40 min de questões erradas.</li>
+<li>Na véspera: nada de conteúdo novo pesado; simulado + erro + mapa final.</li>
+</ul>
+</div>
+</section>
+<div class="footer">Site gerado a partir dos arquivos enviados: plano de ensino, provas antigas, transcrições e aulas AP2 de Psiquiatria. Use como revisão acadêmica, não como orientação clínica individual.</div>
+</main>
+<button class="print" onclick="window.print()">Imprimir/Salvar PDF</button>
+<script>
+const questions = [{"q": "Qual característica é essencial para diagnosticar transtorno de personalidade?", "opts": ["Traço inflexível com prejuízo funcional/sofrimento", "Alteração transitória do humor", "Presença obrigatória de alucinações", "Início súbito com desorientação"], "a": 0, "exp": "Transtorno de personalidade exige padrão persistente, inflexível e com prejuízo."}, {"q": "Qual grupo inclui paranoide, esquizoide e esquizotípico?", "opts": ["Grupo A", "Grupo B", "Grupo C", "Grupo D"], "a": 0, "exp": "Grupo A = excêntricos/esquisitos."}, {"q": "Qual grupo inclui antissocial e borderline?", "opts": ["Grupo A", "Grupo B", "Grupo C", "Transtornos orgânicos"], "a": 1, "exp": "Grupo B = dramáticos, emotivos e erráticos."}, {"q": "Qual grupo inclui esquiva, dependente e obsessivo-compulsivo?", "opts": ["Grupo A", "Grupo B", "Grupo C", "Grupo psicótico"], "a": 2, "exp": "Grupo C = ansiosos e temerosos."}, {"q": "O termo ego-sintônico significa que o paciente geralmente:", "opts": ["Rejeita totalmente o sintoma", "Aceita o traço como parte de si", "Tem rebaixamento de consciência", "Apresenta delírio organizado"], "a": 1, "exp": "Traços de personalidade costumam ser vividos como compatíveis com o ego."}, {"q": "Antes dos 18 anos, padrão antissocial persistente deve levantar hipótese de:", "opts": ["Transtorno de conduta/opositor desafiante", "Transtorno de personalidade formal", "Demência vascular", "Delirium hipoativo"], "a": 0, "exp": "Personalidade é considerada formada na vida adulta."}, {"q": "Tratamento de escolha geral para transtornos de personalidade:", "opts": ["Psicoterapia", "Antibiótico", "ECT rotineira", "Benzodiazepínico crônico isolado"], "a": 0, "exp": "Medicação é coadjuvante; psicoterapia é base."}, {"q": "Ausência de remorso e violação de normas sugerem:", "opts": ["Antissocial", "Dependente", "Esquivo", "Obsessivo-compulsivo"], "a": 0, "exp": "Antissocial = desrespeito a normas e remorso reduzido."}, {"q": "Instabilidade afetiva, relações intensas e medo de abandono sugerem:", "opts": ["Borderline", "Paranoide", "Esquizoide", "Obsessivo-compulsivo"], "a": 0, "exp": "Borderline é marcado por instabilidade."}, {"q": "Desconfiança persistente sem delírio fixo sugere:", "opts": ["Paranoide", "Esquizofrenia necessariamente", "Dependente", "Histriônico"], "a": 0, "exp": "Paranoide tem suspeita e interpretação ameaçadora."}, {"q": "Isolamento com pouco desejo de vínculo sugere:", "opts": ["Esquizoide", "Esquiva", "Dependente", "Histriônico"], "a": 0, "exp": "Esquizoide prefere distanciamento."}, {"q": "Isolamento por medo de crítica/rejeição sugere:", "opts": ["Esquiva", "Esquizoide", "Antissocial", "Narcisista"], "a": 0, "exp": "Esquiva deseja vínculo, mas teme rejeição."}, {"q": "Pensamento mágico e excentricidade sugerem:", "opts": ["Esquizotípico", "Dependente", "Antissocial", "TOC"], "a": 0, "exp": "Esquizotípico = excêntrico + pensamento mágico."}, {"q": "Perfeccionismo rígido e controle, sem obsessões egodistônicas obrigatórias, sugere:", "opts": ["Personalidade obsessivo-compulsiva", "TOC obrigatoriamente", "Delirium", "Mania"], "a": 0, "exp": "TPOC difere de TOC."}, {"q": "Teatralidade e busca de atenção sugerem:", "opts": ["Histriônico", "Esquizoide", "Paranoide", "Dependente"], "a": 0, "exp": "Histriônico é dramático e busca atenção."}, {"q": "Grandiosidade e necessidade de admiração sugerem:", "opts": ["Narcisista", "Esquiva", "Dependente", "Paranoide"], "a": 0, "exp": "Narcisista = grandiosidade e pouca empatia."}, {"q": "Na cocaína, altas doses podem causar:", "opts": ["Agitação e sintomas maniformes", "Bradicinesia isolada", "Hipersonia imediata sempre", "Demência progressiva"], "a": 0, "exp": "Cocaína é estimulante; intoxicação pode imitar mania/psicose."}, {"q": "Abstinência de cocaína costuma cursar com:", "opts": ["Disforia, fadiga e hipersonolência", "Euforia sustentada", "Delírio tremens clássico", "Amnésia global"], "a": 0, "exp": "Abstinência de estimulante tende a queda de energia/humor."}, {"q": "Comorbidade frequente em dependência de cocaína:", "opts": ["Transtorno de personalidade antissocial", "Transtorno de aprendizagem apenas", "Autismo obrigatório", "Demência frontotemporal"], "a": 0, "exp": "Antissocial, ansiedade, humor e álcool são comuns."}, {"q": "Perfuração de septo nasal pode ocorrer com:", "opts": ["Cocaína aspirada", "Lítio", "Fluoxetina", "Haloperidol"], "a": 0, "exp": "Vasoconstrição local pode lesar septo."}, {"q": "Benzodiazepínico na abstinência alcoólica é usado como:", "opts": ["Terapia de substituição/sedação segura", "Antidepressivo de manutenção", "Antipsicótico de depósito", "Anticraving de nicotina"], "a": 0, "exp": "BZD é central na abstinência alcoólica."}, {"q": "Fármaco clássico usado para dependência de nicotina:", "opts": ["Bupropiona", "Haloperidol", "Carbamazepina apenas", "Disulfiram"], "a": 0, "exp": "Bupropiona auxilia cessação do tabaco."}, {"q": "Disulfiram no álcool funciona principalmente por:", "opts": ["Reação aversiva ao álcool", "Aumentar prazer do álcool", "Bloquear dopamina D2", "Ser ISRS"], "a": 0, "exp": "Disulfiram exige cuidado e consentimento."}, {"q": "Naltrexona atua em álcool/opioides como:", "opts": ["Antagonista opioide", "Agonista GABA", "ISRS", "Anticolinesterásico"], "a": 0, "exp": "Reduz reforço/prazer."}, {"q": "Topiramato pode ser usado como:", "opts": ["Anticraving", "Antibiótico", "Antipsicótico típico", "Hipnótico BZD"], "a": 0, "exp": "Topiramato pode reduzir fissura."}, {"q": "Prometazina pode ajudar em craving/insônia porque:", "opts": ["Seda sem dependência típica de BZD", "É estimulante dopaminérgico", "Cura dependência isoladamente", "É antidepressivo tricíclico"], "a": 0, "exp": "É sedativa e útil pontualmente."}, {"q": "Depressão é transtorno do:", "opts": ["Humor", "Afeto exclusivamente", "Pensamento formal apenas", "Nível de consciência"], "a": 0, "exp": "Humor é o estado subjetivo persistente."}, {"q": "Núcleo da depressão inclui:", "opts": ["Humor deprimido/anhedonia/perda de interesse", "Apenas alucinações auditivas", "Somente compulsões", "Somente amnésia"], "a": 0, "exp": "Sintomas centrais: humor deprimido e perda de prazer/interesse."}, {"q": "Antes de fechar depressão, deve-se:", "opts": ["Excluir causas orgânicas e substâncias", "Começar lítio em todos", "Indicar ECT em todos", "Ignorar medicamentos em uso"], "a": 0, "exp": "Diagnóstico diferencial é essencial."}, {"q": "Hipotireoidismo pode mimetizar:", "opts": ["Depressão", "Antissocial", "Fobia específica obrigatória", "Intoxicação por cocaína"], "a": 0, "exp": "Causas clínicas podem causar sintomas depressivos."}, {"q": "Em idoso, depressão pode parecer:", "opts": ["Pseudodemência", "Apenas mania clássica", "Transtorno de conduta", "Uso de cocaína"], "a": 0, "exp": "Queixa cognitiva em depressão pode simular demência."}, {"q": "Tratamento mais efetivo para depressão moderada/grave costuma combinar:", "opts": ["Psicoterapia + farmacoterapia", "Apenas contenção física", "Apenas redução de danos", "Apenas antibiótico"], "a": 0, "exp": "Combinação costuma ter melhor resposta."}, {"q": "Antidepressivos geralmente têm resposta clínica após:", "opts": ["Semanas", "Minutos", "Anos sempre", "Apenas após ECT"], "a": 0, "exp": "Latência é pegadinha recorrente."}, {"q": "Antidepressivo pode precipitar hipomania em:", "opts": ["Transtorno bipolar", "Demência vascular", "Personalidade esquizoide", "Abstinência alcoólica apenas"], "a": 0, "exp": "Virada maníaca sugere bipolaridade."}, {"q": "Mania exige evitar:", "opts": ["Antidepressivo isolado", "Estabilizador de humor", "Antipsicótico quando indicado", "Avaliação de risco"], "a": 0, "exp": "Antidepressivo isolado pode piorar mania."}, {"q": "Lítio/valproato são usados principalmente como:", "opts": ["Estabilizadores de humor", "Antibióticos", "Anticolinérgicos", "Hipnóticos"], "a": 0, "exp": "Base no tratamento bipolar."}, {"q": "ADT pode causar:", "opts": ["Hipotensão ortostática/efeitos anticolinérgicos", "Ausência total de efeitos", "Cura imediata", "Abstinência alcoólica"], "a": 0, "exp": "Tricíclicos têm perfil de efeitos mais pesado."}, {"q": "Delirium se caracteriza por:", "opts": ["Início agudo, flutuação e desatenção", "Personalidade desde infância", "Humor deprimido isolado por anos", "Apenas medo de crítica"], "a": 0, "exp": "Delirium é síndrome orgânica aguda e flutuante."}, {"q": "Tratamento de delirium deve focar em:", "opts": ["Causa orgânica e medidas ambientais", "Psicoterapia de longo prazo isolada", "Antidepressivo sempre", "Ignorar orientação temporal"], "a": 0, "exp": "Tratar causa e reorientar."}, {"q": "Haloperidol no delirium é usado principalmente para:", "opts": ["Agitação/risco comportamental", "Curar causa orgânica", "Melhorar B12", "Tratar abstinência alcoólica isoladamente"], "a": 0, "exp": "Não cura delirium; controla agitação quando necessário."}, {"q": "Na abstinência alcoólica com delirium tremens, fármaco central:", "opts": ["Benzodiazepínico", "ISRS", "Disulfiram imediato", "Bupropiona"], "a": 0, "exp": "BZD previne complicações."}, {"q": "Sintomas extrapiramidais com antipsicóticos incluem:", "opts": ["Distonia, parkinsonismo, acatisia", "Hiperglicemia apenas", "Anemia hemolítica", "Hipotireoidismo"], "a": 0, "exp": "EPE são clássicos de bloqueio dopaminérgico."}, {"q": "Biperideno pode ser usado em:", "opts": ["Distonia/parkinsonismo induzido por antipsicótico", "Depressão leve isolada", "Dependência de nicotina", "Insônia crônica sem causa"], "a": 0, "exp": "Anticolinérgico para EPE."}, {"q": "Pânico é melhor descrito como:", "opts": ["Crises abruptas de medo intenso com sintomas autonômicos", "Desconfiança vitalícia", "Perda progressiva de memória", "Violação de normas"], "a": 0, "exp": "Crise de pânico é episódica e autonômica."}, {"q": "TAG envolve:", "opts": ["Preocupação excessiva persistente", "Euforia e grandiosidade", "Delírio bizarro obrigatório", "Isolamento sem desejo de vínculo"], "a": 0, "exp": "TAG = preocupação difusa."}, {"q": "Na abordagem da agitação, primeiro passo é:", "opts": ["Segurança, verbalização e redução de estímulos", "Confrontar o delírio", "Deixar sem observação", "Sedação sem avaliação"], "a": 0, "exp": "Desescalada e segurança vêm antes."}, {"q": "Em paciente psicótico, diante de delírio deve-se:", "opts": ["Não entrar nem confrontar diretamente; acolher e avaliar risco", "Confirmar o delírio", "Ridicularizar a crença", "Ignorar risco"], "a": 0, "exp": "Confronto direto tende a piorar vínculo."}, {"q": "Exames laboratoriais em psiquiatria servem para:", "opts": ["Excluir causas orgânicas e ter valores basais", "Dar diagnóstico definitivo de depressão", "Substituir anamnese", "Confirmar personalidade"], "a": 0, "exp": "Não há exame que feche a maioria dos transtornos."}, {"q": "Avaliação multiaxial DSM-IV colocava personalidade no:", "opts": ["Eixo II", "Eixo I", "Eixo III", "Eixo V"], "a": 0, "exp": "Eixo II = personalidade e retardo mental."}, {"q": "Eixo V no DSM-IV referia-se a:", "opts": ["Avaliação global do funcionamento", "Condição médica geral", "Problemas ambientais", "Transtornos clínicos"], "a": 0, "exp": "AGF varia de 0 a 100."}, {"q": "Qual alternativa diferencia borderline de bipolaridade em muitos casos de prova?", "opts": ["Oscilação rápida e reativa a eventos interpessoais", "Episódios sempre de meses sem gatilho", "Obrigatória alucinação visual", "Perda progressiva de memória"], "a": 0, "exp": "TPB oscila conforme relações/gatilhos; bipolar tem episódios sindrômicos."}, {"q": "Em transtorno de personalidade, medicação é geralmente:", "opts": ["Coadjuvante para sintomas-alvo", "Curativa e primeira linha isolada", "Contraindicada em todo caso", "Diagnóstica"], "a": 0, "exp": "Psicoterapia é base; fármacos ajudam impulsividade, ansiedade, humor etc."}, {"q": "Qual é a melhor postura com dependente químico sem motivação para abstinência?", "opts": ["Considerar redução de danos e vínculo", "Abandonar acompanhamento", "Forçar internação em todo caso", "Usar disulfiram escondido"], "a": 0, "exp": "Redução de danos pode manter cuidado e reduzir risco."}, {"q": "A intoxicação por estimulantes pode mimetizar:", "opts": ["Mania/psicose", "Demência de Alzheimer", "Personalidade dependente", "Hipotireoidismo"], "a": 0, "exp": "Cocaína pode gerar agitação, paranoia e sintomas maniformes."}, {"q": "Na depressão, mau prognóstico inclui:", "opts": ["Abuso de álcool/substâncias", "Episódio leve único", "Boa rede social", "Início tardio sem comorbidade"], "a": 0, "exp": "Substâncias e comorbidades pioram curso."}, {"q": "Bom prognóstico na depressão inclui:", "opts": ["Ausência de sintomas psicóticos", "Múltiplas hospitalizações", "Abuso de álcool", "Transtorno de personalidade grave"], "a": 0, "exp": "Quadros leves e sem psicose tendem a melhor evolução."}, {"q": "Em depressão bipolar, uma pista importante é:", "opts": ["História de hipomania/mania", "Medo de crítica apenas", "Ausência de sono por café somente", "Ciúme patológico"], "a": 0, "exp": "Sempre rastrear bipolaridade antes de antidepressivo."}, {"q": "No TEA, núcleo envolve:", "opts": ["Déficit social/comunicação e padrões restritos repetitivos", "Delírio persecutório obrigatório", "Violação de normas com remorso ausente", "Episódios depressivos recorrentes apenas"], "a": 0, "exp": "TEA é transtorno do neurodesenvolvimento."}, {"q": "Violência em saúde mental se associa fortemente a:", "opts": ["Intoxicação, histórico de violência e impulsividade", "Diagnóstico psiquiátrico isolado em todos", "Uso de ISRS sempre", "Ter religião"], "a": 0, "exp": "Risco é multifatorial; não estigmatizar."}, {"q": "Em demência, exames para causas reversíveis podem incluir:", "opts": ["B12, TSH, eletrólitos e investigação clínica", "Somente teste de personalidade", "Apenas ECT", "Somente dosagem de serotonina"], "a": 0, "exp": "Investigar causas tratáveis."}, {"q": "ECT pode ser considerada em depressão grave quando há:", "opts": ["Gravidade, risco, psicose ou refratariedade", "Todo episódio leve", "Dependência de nicotina", "Personalidade esquiva"], "a": 0, "exp": "ECT não é primeira escolha em todos, mas é eficaz em situações graves."}, {"q": "Paciente com grandiosidade, pouca necessidade de sono e gasto excessivo sugere:", "opts": ["Mania", "Esquizoide", "Depressão atípica", "Delirium hipoativo"], "a": 0, "exp": "Mania = energia elevada + prejuízo/risco."}, {"q": "Hipomania difere de mania por:", "opts": ["Menor gravidade, sem psicose/prejuízo grave", "Ser sempre depressiva", "Ter desorientação", "Causar demência"], "a": 0, "exp": "Hipomania não tem psicose nem prejuízo acentuado."}, {"q": "No início de ISRS com ansiedade intensa, pode-se considerar:", "opts": ["BZD por curto período", "BZD crônico sem revisão", "Disulfiram", "Haloperidol decanoato"], "a": 0, "exp": "Uso curto e monitorado pode ajudar."}, {"q": "Uso crônico de BZD tem risco de:", "opts": ["Dependência e prejuízo cognitivo/sedação", "Cura de personalidade", "Aumento de B12", "Proteção contra álcool"], "a": 0, "exp": "BZD não é solução crônica para tudo."}, {"q": "Haloperidol + prometazina pode ser lembrado em:", "opts": ["Agitação psicótica e prevenção/manejo de efeitos extrapiramidais/sedação", "Depressão leve", "TEA sem irritabilidade", "Cessação tabágica"], "a": 0, "exp": "Provas locais citam essa associação em agitação."}, {"q": "Antidepressivo tricíclico em overdose é perigoso por:", "opts": ["Cardiotoxicidade/efeitos anticolinérgicos", "Ser placebo", "Não atravessar SNC", "Causar apenas rinite"], "a": 0, "exp": "ADT exige cuidado."}, {"q": "Sintoma negativo da esquizofrenia:", "opts": ["Embotamento afetivo/avolia", "Delírio persecutório", "Alucinação auditiva", "Fuga de ideias"], "a": 0, "exp": "Negativos são déficits."}, {"q": "Sintoma positivo da esquizofrenia:", "opts": ["Delírio/alucinação", "Avolia isolada", "Anedonia isolada", "Afeto plano isolado"], "a": 0, "exp": "Positivos são excesso/distorção."}, {"q": "Na prova, 'não cede à argumentação lógica' define:", "opts": ["Delírio", "Ilusão", "Fobia simples", "Compulsão"], "a": 0, "exp": "Delírio é crença fixa com convicção."}, {"q": "Ilusão difere de alucinação porque:", "opts": ["Há estímulo real mal interpretado", "Não há estímulo real", "É sempre fingimento", "É traço de personalidade"], "a": 0, "exp": "Ilusão = interpretação errada de estímulo."}, {"q": "Alucinação é:", "opts": ["Percepção sem objeto real", "Crença fixa", "Medo de objeto", "Memória falsa voluntária"], "a": 0, "exp": "Sem estímulo externo correspondente."}, {"q": "Crítica/insight avalia:", "opts": ["Compreensão do paciente sobre sintomas e comportamento", "Número de linfócitos", "Função renal apenas", "Grupo de personalidade"], "a": 0, "exp": "Insight é consciência de adoecimento."}, {"q": "No manejo de substâncias, comorbidade depressiva persistente deve ser:", "opts": ["Tratada junto ao uso de substância", "Ignorada até anos depois", "Sempre tratada com BZD isolado", "Vista como simulação"], "a": 0, "exp": "Abordagem integrada é necessária."}, {"q": "Abuso difere de dependência porque no abuso:", "opts": ["Há prejuízo sem necessariamente tolerância/abstinência", "Sempre há abstinência grave", "Não há dano", "Há psicose obrigatória"], "a": 0, "exp": "Abuso = dano; dependência = perda de controle e adaptação."}, {"q": "Fissura/craving é:", "opts": ["Vontade intensa de usar", "Delírio de perseguição", "Sintoma negativo", "Amnésia retrógrada"], "a": 0, "exp": "Craving pode ocorrer sem abstinência física."}, {"q": "Pessoa dependente, submissa, incapaz de decidir sozinha sugere:", "opts": ["Personalidade dependente", "Antissocial", "Narcisista", "Esquizotípica"], "a": 0, "exp": "Dependente busca cuidado e suporte."}, {"q": "Antissocial não significa necessariamente:", "opts": ["Violência física em todos os casos", "Desrespeito a normas", "Ausência de remorso", "Exploração"], "a": 0, "exp": "Pode haver formas não violentas, como estelionato."}, {"q": "Personalidade paranoide usa frequentemente:", "opts": ["Projeção", "Sublimação apenas", "Confabulação típica", "Fuga dissociativa"], "a": 0, "exp": "Projeta intenções hostis nos outros."}, {"q": "Esquizotípico pode ser personalidade pré-mórbida de:", "opts": ["Esquizofrenia", "Diabetes", "Hipotireoidismo", "Transtorno de pânico sempre"], "a": 0, "exp": "Grupo A tem relação com espectro esquizofrênico."}, {"q": "Paciente com medo de abandono e atitudes que afastam pessoas ilustra:", "opts": ["Sintoma autoplástico", "Confabulação", "Delirium", "Eixo III"], "a": 0, "exp": "O padrão modifica o ambiente e confirma o medo."}, {"q": "Em prova local, antissocial e borderline são:", "opts": ["Muito importantes na prática clínica", "Nunca cobrados", "Apenas AP1", "Somente pediatria"], "a": 0, "exp": "Aulas destacam esses dois."}, {"q": "Na depressão, sintomas ansiosos são:", "opts": ["Comuns", "Impossíveis", "Sinal de cura", "Exclusivos de mania"], "a": 0, "exp": "Ansiedade frequentemente acompanha depressão."}, {"q": "Pseudodemência depressiva tende a mostrar:", "opts": ["Queixa cognitiva associada ao humor", "Curso abrupto com febre sempre", "Personalidade antissocial", "Euforia"], "a": 0, "exp": "Depressão pode simular déficit cognitivo."}, {"q": "Indicação de internação em depressão:", "opts": ["Risco ou incapacidade de autocuidado", "Todo paciente triste", "Todo uso de ISRS", "Apenas insônia leve"], "a": 0, "exp": "Segurança e autocuidado guiam."}, {"q": "Na avaliação de prova, AP2 pode ser objetiva/discursiva/seminário e exige:", "opts": ["Análise semântica e fundamentação", "Apenas decorar datas", "Desenho anatômico", "Cálculo estatístico"], "a": 0, "exp": "Plano cita critérios de análise semântica e fundamentação."}, {"q": "O conteúdo da AP2 no plano corresponde a:", "opts": ["Matéria após AP1 até AP2", "Somente AP1", "Todo internato", "Apenas anatomia"], "a": 0, "exp": "Plano define o recorte."}, {"q": "Seminários entram como:", "opts": ["Parte da avaliação/nota e conteúdo complementar", "Atividade sem valor", "Somente presença informal", "Prova prática de cirurgia"], "a": 0, "exp": "Plano atribui nota a seminários."}, {"q": "Em emergência com contenção medicamentosa, avaliar nível de consciência é importante porque:", "opts": ["Sedativos podem deprimir SNC", "Não existe risco", "Serve para diagnosticar personalidade", "Substitui exame físico"], "a": 0, "exp": "Segurança clínica é essencial."}, {"q": "Depressão induzida por substância deve ser considerada quando:", "opts": ["Sintomas se relacionam temporalmente ao uso/abstinência", "Sempre há mania", "Não há uso de drogas", "Apenas há ciúme"], "a": 0, "exp": "Temporalidade é chave."}, {"q": "Cannabis pode desencadear em vulneráveis:", "opts": ["Psicose/sintomas ansiosos", "Apenas melhora cognitiva", "Transtorno antissocial obrigatório", "Hipotireoidismo"], "a": 0, "exp": "Aulas anotam psicose desencadeada por cannabis."}, {"q": "A abordagem inicial de SPAs deve avaliar:", "opts": ["Substância, padrão de uso, apoio e características individuais", "Somente idade", "Apenas religião", "Somente tipo sanguíneo"], "a": 0, "exp": "Tratamento varia conforme esses fatores."}, {"q": "Redução de danos busca:", "opts": ["Diminuir riscos mesmo sem abstinência imediata", "Aumentar uso", "Punir paciente", "Suspender vínculo"], "a": 0, "exp": "É estratégia pragmática."}, {"q": "Em delirium, medida não farmacológica útil:", "opts": ["Relógio/calendário e reorientação", "Isolamento escuro absoluto", "Confronto", "Privação de sono"], "a": 0, "exp": "Ambiente e orientação ajudam."}, {"q": "Desorientação flutuante em idoso hospitalizado sugere:", "opts": ["Delirium", "Narcisismo", "Esquiva", "Hipomania pura"], "a": 0, "exp": "Delirium é comum em contexto clínico."}, {"q": "Curso progressivo de memória e função sugere mais:", "opts": ["Demência", "Delirium sempre", "Pânico", "Histriônico"], "a": 0, "exp": "Demência é crônica/progressiva."}, {"q": "VHS, B12, função renal, tireoide e eletrólitos podem ser úteis em:", "opts": ["Investigação de causas clínicas/cognitivas", "Diagnóstico de narcisismo", "Prova de abstinência de cocaína", "Classificação de grupo B"], "a": 0, "exp": "Exames complementam raciocínio."}, {"q": "Na esquizofrenia, antipsicótico de depósito pode ser indicado quando há:", "opts": ["Dificuldade de adesão", "Depressão leve", "Tabagismo leve", "Esquiva sem psicose"], "a": 0, "exp": "Depot melhora adesão."}, {"q": "Risperidona é um exemplo de:", "opts": ["Antipsicótico", "ISRS", "BZD", "Anticraving"], "a": 0, "exp": "Risperidona é antipsicótico atípico."}, {"q": "Fluoxetina é um exemplo de:", "opts": ["ISRS", "Estabilizador clássico", "Antipsicótico típico", "BZD"], "a": 0, "exp": "Fluoxetina = ISRS."}];
+let answered = {};
+function showTab(id){
+ document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('button.tab').forEach(b=>b.classList.remove('active'));
+ [...document.querySelectorAll('button.tab')].find(b=>b.textContent.toLowerCase().includes(id.replace('questoes','100').replace('spas','spas').replace('inicio','início')))?.classList.add('active');
+ if(id==='questoes') renderQuiz();
+ window.scrollTo(0,0);
+}
+function renderQuiz(){
+ const term = (document.getElementById('search')?.value || '').toLowerCase();
+ const box = document.getElementById('quiz');
+ const filtered = questions.map((x,i)=>({...x, idx:i})).filter(x => !term || (x.q + ' ' + x.opts.join(' ') + ' ' + x.exp).toLowerCase().includes(term));
+ box.innerHTML = filtered.map((x,n)=>`
+  <div class="qcard">
+   <h3>Questão ${x.idx+1}</h3>
+   <p>${x.q}</p>
+   ${x.opts.map((op,j)=>`<button class="option ${answered[x.idx]!==undefined ? (j===x.a?'correct':(answered[x.idx]===j?'wrong':'')) : ''}" onclick="answer(${x.idx},${j})">${String.fromCharCode(65+j)}) ${op}</button>`).join('')}
+   <div class="expl" id="exp-${x.idx}" style="display:${answered[x.idx]!==undefined?'block':'none'}"><b>Comentário:</b> ${x.exp}</div>
+  </div>`).join('');
+ updateScore();
+}
+function answer(i,j){ answered[i]=j; renderQuiz(); }
+function updateScore(){
+ const total = Object.keys(answered).length;
+ const correct = Object.entries(answered).filter(([i,j]) => questions[+i].a === +j).length;
+ document.getElementById('score').textContent = `Acertos: ${correct}/${total}`;
+ document.getElementById('bar').style.width = total ? `${(correct/total)*100}%` : '0%';
+}
+function resetQuiz(){ answered={}; renderQuiz(); }
+</script>
+</body>
+</html>
